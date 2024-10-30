@@ -1,6 +1,7 @@
 #[warn(missing_docs, missing_debug_implementations)]
 #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
-use raw_cpuid::{CpuId, ProcessorBrandString};
+use raw_cpuid::CpuId;
+use raw_cpuid::ProcessorBrandString;
 #[cfg(target_os = "linux")]
 use rayon::prelude::*;
 #[cfg(target_os = "linux")]
