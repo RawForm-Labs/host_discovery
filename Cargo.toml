@@ -9,9 +9,9 @@ repository = "https://github.com/chrispaig3/host_discovery"
 edition = "2021"
 
 [dependencies]
-raw-cpuid = "11.1.0"
+raw-cpuid = "11.2.0"
 rayon = "1.10.0"
-wgpu = "22.1.0"
+wgpu = "23.0.0"
 
 [target.'cfg(windows)'.dependencies]
 windows-registry = "0.3.0"
