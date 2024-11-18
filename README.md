@@ -36,8 +36,9 @@ fn main() {
 
 - OS
 - Architecture
+- Hostname
 - Windows Edition
 - WSL Detection
 - Linux Distro
-- GPU Enumeration
-- CPU Detection
+- GPU Enumeration (Crossplatform via Wgpu)
+- CPU Detection (x86/64)
