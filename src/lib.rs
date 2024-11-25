@@ -76,7 +76,7 @@ impl<'o, 'a> OSProfile<'o, 'a> {
         let key = LOCAL_MACHINE;
         let sub_key = key
             .open(WIN_EDITION_PATH)
-            .expect("Failed to find registry path for: CurrentVersion");
+            .expect("Failed to find registry entry for: CurrentVersion");
         let edition = sub_key
             .get_string("EditionID")
             .expect("Failed to identify Windows Edition");
@@ -91,7 +91,7 @@ impl<'o, 'a> OSProfile<'o, 'a> {
         let key = LOCAL_MACHINE;
         let sub_key = key
             .open(COMPUTER_NAME_PATH)
-            .expect("Failed to find registry path for: ComputerName");
+            .expect("Failed to find registry entry for: ComputerName");
         let name = sub_key
             .get_string("ComputerName")
             .expect("Failed to find key: ComputerName");
