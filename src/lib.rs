@@ -1,6 +1,9 @@
+#[cfg(target_os = "macos")]
+use std::process::Command;
 #[warn(missing_docs, missing_debug_implementations)]
 #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
 use raw_cpuid::CpuId;
+#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
 use raw_cpuid::ProcessorBrandString;
 #[cfg(target_os = "linux")]
 use rayon::prelude::*;
@@ -37,9 +40,9 @@ pub struct OSProfile<'o, 'a> {
 }
 
 #[derive(Debug)]
-pub struct Processor {
-    pub model: ProcessorBrandString,
-    pub cores: u32,
+pub struct Processor<Model, Cores> {
+    pub model: Model,
+    pub cores: Cores,
 }
 
 #[derive(Debug)]
@@ -53,8 +56,14 @@ impl<'o, 'a> std::fmt::Display for OSProfile<'o, 'a> {
         write!(f, "{:?}", self)
     }
 }
-// display_with_lifetimes!(OSProfile);
-display!(Processor);
+
+impl<Model, Cores> std::fmt::Display for Processor<Model, Cores> 
+where Model: std::fmt::Debug, Cores: std::fmt::Debug {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{:?}", self)
+    }
+}
+
 display!(GraphicsCard);
 
 impl<'o, 'a> OSProfile<'o, 'a> {
@@ -146,7 +155,7 @@ impl<'o, 'a> OSProfile<'o, 'a> {
 
 /// Returns a `Processor` object containing the CPU model and logical core count  (x86 only)
 #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
-pub fn cpu() -> Processor {
+pub fn x86_cpu() -> Processor<ProcessorBrandString, u32> {
     let cpuid = CpuId::new();
     let brand = cpuid.get_processor_brand_string().unwrap();
     let cores = cpuid.get_processor_capacity_feature_info().unwrap();
@@ -154,6 +163,31 @@ pub fn cpu() -> Processor {
     let cpu = Processor {
         model: brand,
         cores: cores.maximum_logical_processors() as u32,
+    };
+    cpu
+}
+
+/// Returns a `Processor` object containing the CPU model and logical core count (macOS only)
+#[cfg(target_os = "macos")]
+pub fn macos_cpu() -> Processor<String, String> {
+    let cpu_output = Command::new("sysctl")
+        .arg("machdep.cpu.brand_string")
+        .output()
+        .expect("Failed to execute sysctl command");
+
+    let core_output = Command::new("sysctl")
+        .arg("hw.logicalcpu")
+        .output()
+        .expect("Failed to execute sysctl command");
+   
+    let encoded_cpu_output = String::from_utf8(cpu_output.stdout).unwrap();
+    let encoded_core_output = String::from_utf8(core_output.stdout).unwrap();
+    
+    let model= encoded_cpu_output.split(": ").nth(1).unwrap().trim();
+    let cores = encoded_core_output.split(": ").nth(1).unwrap().trim();
+    let cpu = Processor {
+        model: model.to_string(),
+        cores: cores.to_string(),
     };
     cpu
 }

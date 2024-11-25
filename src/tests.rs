@@ -1,4 +1,7 @@
-use crate::cpu;
+#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+use crate::x86_cpu;
+#[cfg(target_os = "macos")]
+use crate::macos_cpu;
 use crate::gpu;
 use crate::OSProfile;
 use crate::ARCH;
@@ -43,9 +46,17 @@ fn test_wsl() {
 #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
 #[test]
 pub fn test_cpu() {
-    let cpu = cpu();
+    let cpu = x86_cpu();
     assert!(cpu.model.as_str().starts_with("AMD"));
     assert_eq!(cpu.cores, 16);
+}
+
+#[cfg(target_os = "macos")]
+#[test]
+pub fn test_macos_cpu() {
+    let cpu = macos_cpu();
+    assert_eq!(cpu.model, "Apple M1");
+    assert_eq!(cpu.cores, "8");
 }
 
 #[test]
