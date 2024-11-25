@@ -40,5 +40,5 @@ fn main() {
 - Windows Edition
 - WSL Detection
 - Linux Distro
-- GPU Enumeration (Crossplatform via Wgpu)
-- CPU Detection (x86/64)
+- GPU Enumeration
+- CPU Detection (x86_64, aarch64 - macOS Only)
