@@ -29,7 +29,7 @@ fn main() {
 ```
 
 #### V3 Roadmap
-- Reduce dependency load by implementing a smaller utility crate for detecting CPUs (migrate from raw_cpuid).
+- Migrate from raw_cpuid to custom solution to support more CPU architectures.
 
 > Current Features
 
