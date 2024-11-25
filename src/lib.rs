@@ -16,6 +16,11 @@ use wgpu::{Backends, Instance};
 #[cfg(target_os = "windows")]
 use windows_registry::LOCAL_MACHINE;
 
+mod constants;
+#[cfg(target_os = "linux")]
+use constants::WSL_INTEROP_PATH;
+#[cfg(target_os = "windows")]
+use constants::{COMPUTER_NAME_PATH, WIN_EDITION_PATH};
 mod display;
 #[cfg(test)]
 mod tests;
@@ -70,7 +75,7 @@ impl<'o, 'a> OSProfile<'o, 'a> {
     pub fn win_edition(mut self) -> Self {
         let key = LOCAL_MACHINE;
         let sub_key = key
-            .open("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion")
+            .open(WIN_EDITION_PATH)
             .expect("Failed to find registry path for: CurrentVersion");
         let edition = sub_key
             .get_string("EditionID")
@@ -85,7 +90,7 @@ impl<'o, 'a> OSProfile<'o, 'a> {
     pub fn computer_name(mut self) -> Self {
         let key = LOCAL_MACHINE;
         let sub_key = key
-            .open("SYSTEM\\CurrentControlSet\\Control\\ComputerName\\ComputerName")
+            .open(COMPUTER_NAME_PATH)
             .expect("Failed to find registry path for: ComputerName");
         let name = sub_key
             .get_string("ComputerName")
@@ -121,7 +126,7 @@ impl<'o, 'a> OSProfile<'o, 'a> {
     /// Returns true if the Linux host is running on WSL
     #[cfg(target_os = "linux")]
     pub fn is_wsl(mut self) -> Self {
-        let path = Path::new("/proc/sys/fs/binfmt_misc/WSLInterop").exists();
+        let path = Path::new(WSL_INTEROP_PATH).exists();
         self.is_wsl = Some(path);
         self
     }
