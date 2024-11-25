@@ -55,7 +55,8 @@ pub fn test_cpu() {
 #[test]
 pub fn test_macos_cpu() {
     let cpu = macos_cpu();
-    println!("{:?}", cpu);
+    assert_eq!(cpu.model, "Apple M1");
+    assert_eq!(cpu.cores, "8");
 }
 
 #[test]

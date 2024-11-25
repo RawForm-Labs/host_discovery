@@ -167,6 +167,7 @@ pub fn x86_cpu() -> Processor<ProcessorBrandString, u32> {
     cpu
 }
 
+/// Returns a `Processor` object containing the CPU model and logical core count (macOS only)
 #[cfg(target_os = "macos")]
 pub fn macos_cpu() -> Processor<String, String> {
     let cpu_output = Command::new("sysctl")
@@ -179,11 +180,14 @@ pub fn macos_cpu() -> Processor<String, String> {
         .output()
         .expect("Failed to execute sysctl command");
    
-    let model = String::from_utf8(cpu_output.stdout).unwrap();
-    let cores = String::from_utf8(core_output.stdout).unwrap();
+    let encoded_cpu_output = String::from_utf8(cpu_output.stdout).unwrap();
+    let encoded_core_output = String::from_utf8(core_output.stdout).unwrap();
+    
+    let model= encoded_cpu_output.split(": ").nth(1).unwrap().trim();
+    let cores = encoded_core_output.split(": ").nth(1).unwrap().trim();
     let cpu = Processor {
-        model: model,
-        cores: cores,
+        model: model.to_string(),
+        cores: cores.to_string(),
     };
     cpu
 }
