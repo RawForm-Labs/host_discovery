@@ -158,7 +158,7 @@ impl<'o, 'a> OSProfile<'o, 'a> {
 
 /// Returns a `Processor` object containing the CPU model and logical core count (macOS only)
 #[cfg(target_os = "macos")]
-pub fn macos_cpu() -> Processor<String, String> {
+pub fn sysctl_cpu() -> Processor<String, String> {
     let cpu_output = Command::new("sysctl")
         .arg("machdep.cpu.brand_string")
         .output()
