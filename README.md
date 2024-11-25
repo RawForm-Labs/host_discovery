@@ -28,9 +28,8 @@ fn main() {
 }
 ```
 
-#### Roadmap
-- Reduce dependency load by implementing a smaller utility crate for enumerating devices.
-    - The implementation should be flexible and cross-platform 
+#### V3 Roadmap
+- Reduce dependency load by implementing a smaller utility crate for detecting CPUs (migrate from raw_cpuid).
 
 > Current Features
 
