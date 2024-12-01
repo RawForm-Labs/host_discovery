@@ -40,9 +40,9 @@ pub struct OSProfile<'o, 'a> {
 }
 
 #[derive(Debug)]
-pub struct Processor<Model, Cores> {
-    pub model: Model,
-    pub cores: Cores,
+pub struct Processor<M, C> {
+    pub model: M,
+    pub cores: C,
 }
 
 #[derive(Debug)]
@@ -57,10 +57,10 @@ impl<'o, 'a> std::fmt::Display for OSProfile<'o, 'a> {
     }
 }
 
-impl<Model, Cores> std::fmt::Display for Processor<Model, Cores>
+impl<M, C> std::fmt::Display for Processor<M, C>
 where
-    Model: std::fmt::Debug,
-    Cores: std::fmt::Debug,
+    M: std::fmt::Debug,
+    C: std::fmt::Debug,
 {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{:?}", self)
