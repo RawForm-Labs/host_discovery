@@ -186,11 +186,10 @@ pub fn x86_cpu() -> Processor<ProcessorBrandString, u32> {
     let brand = cpuid.get_processor_brand_string().unwrap();
     let cores = cpuid.get_processor_capacity_feature_info().unwrap();
 
-    let cpu = Processor {
+    Processor {
         model: brand,
         cores: cores.maximum_logical_processors() as u32,
-    };
-    cpu
+    }
 }
 
 /// Returns a `GraphicsCard` object containing the GPU model and driver version
