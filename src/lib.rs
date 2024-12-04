@@ -159,26 +159,24 @@ impl<'o, 'a> OSProfile<'o, 'a> {
 /// Returns a `Processor` object containing the CPU model and logical core count (macOS only)
 #[cfg(target_os = "macos")]
 pub fn sysctl_cpu() -> Processor<String, String> {
-    let cpu_output = Command::new("sysctl")
-        .arg("machdep.cpu.brand_string")
-        .output()
-        .expect("Failed to execute sysctl command");
-
-    let core_output = Command::new("sysctl")
-        .arg("hw.logicalcpu")
-        .output()
-        .expect("Failed to execute sysctl command");
-
-    let encoded_cpu_output = String::from_utf8(cpu_output.stdout).unwrap();
-    let encoded_core_output = String::from_utf8(core_output.stdout).unwrap();
-
-    let model = encoded_cpu_output.split(": ").nth(1).unwrap().trim();
-    let cores = encoded_core_output.split(": ").nth(1).unwrap().trim();
-    let cpu = Processor {
-        model: model.to_string(),
-        cores: cores.to_string(),
+    let get_sysctl_output = |arg: &str| -> String {
+        let output = Command::new("sysctl")
+            .arg(arg)
+            .output()
+            .expect("Failed to execute sysctl command");
+        String::from_utf8(output.stdout)
+            .unwrap()
+            .split(": ")
+            .nth(1)
+            .unwrap()
+            .trim()
+            .to_string()
     };
-    cpu
+
+    Processor {
+        model: get_sysctl_output("machdep.cpu.brand_string"),
+        cores: get_sysctl_output("hw.logicalcpu"),
+    }
 }
 
 /// Returns a `Processor` object containing the CPU model and logical core count  (x86 only)
