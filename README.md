@@ -4,28 +4,30 @@
 
 ### Basic Usage
 ```rust
-use host_discovery::{OSProfile, gpu};
+use host_discovery::{gpu, x86_cpu, OSProfile};
 
 fn main() {
-    // linux example
-    //let profile = OSProfile::new().distro().build();
-    
-    // and/or
-    //let profile = OSProfile::new().is_wsl().build();
-    let profile = OSProfile::new().win_edition().build();
-    let arch = profile.arch;
-    let os = profile.os;
-    let edition = profile.win_edition;
-    let gpu = gpu().expect("Unreachable");
+    let profile = OSProfile::new().computer_name().win_edition().build();
 
+    let os = profile.os;
+    let arch = profile.arch;
+    let win_edition = profile.win_edition.unwrap();
+    let computer_name = profile.computer_name.unwrap();
     println!(
-        " Architecture: {}\n OS: {}\n Edition: {}\n GPU: {}", 
-        arch,
-        os,
-        edition.unwrap(),
-        gpu,
-    )
+        "Profile: [OS: {}, arch: {}, edition: {}, computer name: {}]",
+        os, arch, win_edition, computer_name
+    );
+    println!("GPU: {}", gpu().unwrap());
+    println!("CPU: {}", x86_cpu());
 }
+```
+
+```
+Console Output:
+
+Profile: [OS: windows, arch: x86_64, edition: Professional, computer name: WORK]
+GPU: GraphicsCard { model: "NVIDIA GeForce RTX 3070 Ti", driver_version: "566.36" }
+CPU: Processor { model: ProcessorBrandString { as_str: "AMD Ryzen 7 5700X 8-Core Processor" }, cores: 16 }
 ```
 
 #### V3 Roadmap
