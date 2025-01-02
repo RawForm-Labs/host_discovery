@@ -51,12 +51,6 @@ pub struct GraphicsCard {
     pub driver_version: String,
 }
 
-impl<'o, 'a> std::fmt::Display for OSProfile<'o, 'a> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{:?}", self)
-    }
-}
-
 impl<M, C> std::fmt::Display for Processor<M, C>
 where
     M: std::fmt::Debug,
@@ -68,6 +62,7 @@ where
 }
 
 display!(GraphicsCard);
+display_with_lifetimes!(OSProfile);
 
 impl<'o, 'a> OSProfile<'o, 'a> {
     pub fn new() -> Self {
