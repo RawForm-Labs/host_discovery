@@ -51,18 +51,10 @@ pub struct GraphicsCard {
     pub driver_version: String,
 }
 
-impl<M, C> std::fmt::Display for Processor<M, C>
-where
-    M: std::fmt::Debug,
-    C: std::fmt::Debug,
-{
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{:?}", self)
-    }
-}
-
-display!(GraphicsCard);
-display_with_lifetimes!(OSProfile);
+// shorthand macros for implementing the Display trait
+display_profile!(OSProfile);
+display_graphics!(GraphicsCard);
+display_processor!(Processor<M, C>);
 
 impl<'o, 'a> OSProfile<'o, 'a> {
     pub fn new() -> Self {

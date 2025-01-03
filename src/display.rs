@@ -1,6 +1,16 @@
-// display: Sugar for implementing the Display trait on types
 #[macro_export]
-macro_rules! display {
+macro_rules! display_profile {
+    ($type:ident) => {
+        impl<'a, 'b> std::fmt::Display for $type<'a, 'b> {
+            fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+                write!(f, "{:?}", self)
+            }
+        }
+    };
+}
+
+#[macro_export]
+macro_rules! display_graphics {
     ($type:ident) => {
         impl std::fmt::Display for $type {
             fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -10,14 +20,18 @@ macro_rules! display {
     };
 }
 
-// display: Sugar for implementing the Display trait on types
 #[macro_export]
-macro_rules! display_with_lifetimes {
-    ($type:ident) => {
-        impl<'a, 'b> std::fmt::Display for $type<'a, 'b> {
+macro_rules! display_processor {
+    ($type:ty) => {
+        impl<M, C> std::fmt::Display for $type
+        where
+            M: std::fmt::Debug,
+            C: std::fmt::Debug,
+        {
             fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
                 write!(f, "{:?}", self)
             }
         }
     };
 }
+
