@@ -1,6 +1,6 @@
-> This library is a work in progress
+# This repository is no longer maintained. 
 
-# A simple Rust crate for host discovery
+This crate might be a better choice: [Whoami](https://github.com/ardaku/whoami)
 
 ### Basic Usage
 ```rust
